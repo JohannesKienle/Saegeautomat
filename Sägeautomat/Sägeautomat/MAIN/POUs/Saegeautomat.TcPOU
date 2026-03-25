@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="Saegeautomat" Id="{fa192f54-9603-4bb0-b2e3-1b2d879bf32b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Saegeautomat
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	//Eingänge Bedienung
+	//Organisatorisches
+	IN_BetriebsArt_Referenz AT %I* : BOOL;
+	IN_BetriebsArt_Warmlauf AT %I* : BOOL;
+	IN_BetriebsArt_Automatik AT %I* : BOOL;
+	IN_BetriebsArt_Manuell AT %I* : BOOL;
+	IN_Kein_Notaus AT %I* : BOOL;
+	IN_Maschine_EIN AT %I* : BOOL;
+	IN_Hydraulik_EIN AT %I* : BOOL;
+	IN_Maschine_AUS AT %I* : BOOL;
+	IN_Hydraulik_AUS AT %I* : BOOL;
+	//Manuelle Bedienung
+	IN_Kettenschmierung_Manuell_EIN AT %I* : BOOL;
+	IN_Zufuehrer_Vor AT %I* : BOOL;
+	IN_Zufuehrer_Rueck AT %I* : BOOL;
+	IN_Stammklemmer_Oben_Hoch AT %I* : BOOL;
+	IN_Stammklemmer_Oben_Runter AT %I* : BOOL;
+	IN_Stammklemmer_Unten_Hoch AT %I* : BOOL;
+	IN_Stammklemmer_Unten_Runter AT %I* : BOOL;
+	IN_Saege_EIN AT %I* : BOOL;
+	IN_Saege_AUS AT %I* : BOOL;
+	IN_Saege_Hoch AT %I* : BOOL;
+	IN_Saege_Runter AT %I* : BOOL;
+	//Automatikmodus
+	IN_Programm_Einzelsatz AT %I* : BOOL;
+	IN_Zyklus_Start AT %I* : BOOL;
+	IN_Zyklus_Stopp AT %I* : BOOL;
+	
+	
+	//Eingänge Sensorik
+	//Zuführer
+	IN_Endlage_Zufuehrer_Hinten AT %I* : BOOL;
+	IN_Endlage_Zufuehrer_Vorne AT %I* : BOOL;
+	IN_Vorposition_Zufuehrer AT %I* : BOOL;
+	IN_Schaltausg_Distanzsensor_Holzende AT %I* : BOOL; //Über Schaltausgang oder IO-Link Analogdaten?
+	//Stammklemmung Oben
+	IN_Endl_Obere_Stammklemmung_Oben AT %I* : BOOL;
+	IN_Endl_Obere_Stammklemmung_Unten AT %I* : BOOL;
+	IN_Endl_Tastschiene AT %I* : BOOL;
+	IN_Schaltausg_Druckschalter_Obere_Klemmung AT %I* : BOOL;
+	//Stammklemmung Unten
+	IN_Endl_Untere_Stammklemmung_Oben AT %I* : BOOL;
+	IN_Endl_Untere_Stammklemmung_Unten AT %I* : BOOL;
+	//Säge
+	IN_Endl_Saege_Oben AT %I* : BOOL;
+	IN_Endl_Saege_Unten AT %I* : BOOL;
+	IN_Kettenoel_nicht_Leer AT %I* : BOOL;
+	
+	//Ausgänge
+	//Organisatorisches
+	OUT_Meldeleuchte_Rot AT %Q* : BOOL;//Rot Leuchten: Fehler, Rot Blinken: Kettenöl leer
+	OUT_Meldeleuchte_Gelb AT %Q* : BOOL;//Gelb Leuchten:Referenz fehlt, Gelb Blinken: Zyklus beendet
+	OUT_Meldeleuchte_Gruen AT %Q* : BOOL;//Grün Leuchten: Zyklus läuft, Grün Blinken: Zyklus läuft(warten auf weiterschalten)
+	//Ausgänge Hydraulik
+	OUT_Stammklemmung_Oben_Hoch AT %Q* : BOOL;
+	OUT_Stammklemmung_Oben_Runter AT %Q* : BOOL;
+	OUT_Stammklemmung_Unten_Hoch AT %Q* : BOOL;
+	OUT_Stammklemmung_Unten_Runter AT %Q* : BOOL;
+	OUT_Saege_Senken AT %Q* : BOOL;
+	OUT_Saege_Heben AT %Q* : BOOL;
+	//Ausgänge Schalten
+	OUT_Hydraulikpumpe_EIN AT %Q* : BOOL;
+	//Ausgänge Daten
+		//Ausgang zu FU für Säge und zuführer
+		
+		
+	//Interne Merker
+	Maschine_EIN : BOOL;
+	Hydraulik_EIN : BOOL;
+	Referenz_gefahren : BOOL;
+	Zyklus_beendet : BOOL;
+	busy : BOOL;
+	
+	Referenzfahrt : Referenzfahrt;
+	Warmlauf : Warmlauf;
+	Manueller_Betrieb : Manueller_Betrieb;
+	Automatikbetrieb : Automatik_Betrieb;
+	Steuerung_Meldeleuchten : Meldeleuchte;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF IN_Kein_Notaus AND IN_Maschine_EIN THEN
+	Maschine_EIN := TRUE;
+ELSIF NOT IN_Kein_Notaus OR IN_Maschine_AUS THEN
+	Maschine_EIN := FALSE;
+END_IF
+
+IF Maschine_EIN AND IN_BetriebsArt_Referenz THEN
+	Referenzfahrt(
+		Kein_Notaus := IN_Kein_Notaus,
+		busy := busy,
+		Hydraulik_EIN := Hydraulik_EIN,
+		Referenz_Gefahren := Referenz_gefahren,
+		Zyklus_Beendet := Zyklus_beendet);
+		
+END_IF
+
+IF Maschine_EIN AND IN_BetriebsArt_Warmlauf THEN
+	Warmlauf();
+END_IF
+
+IF Maschine_EIN AND IN_BetriebsArt_Manuell THEN
+	Manueller_Betrieb();
+END_IF
+
+IF Maschine_EIN AND IN_BetriebsArt_Automatik THEN
+	Automatikbetrieb();
+END_IF
+
+Steuerung_Meldeleuchten(
+	Maschine_EIN := ,
+	Referenz_gefahren := ,
+	Kettenschmierung_nicht_leer := ,
+	Fehler_liegt_an := ,
+	Busy := ,
+	Warten_auf_weiterschalten := ,
+	Zyklus_beendet := ,
+	Meldeleuchte_Rot => ,
+	Meldeleuchte_Gelb => ,
+	Meldeleuchte_Gruen => );]]></ST>
+    </Implementation>
+    <LineIds Name="Saegeautomat">
+      <LineId Id="9" Count="0" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="135" Count="1" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="147" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="280" Count="0" />
+      <LineId Id="273" Count="0" />
+      <LineId Id="275" Count="2" />
+      <LineId Id="279" Count="0" />
+      <LineId Id="272" Count="0" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="154" Count="1" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="159" Count="1" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="166" Count="1" />
+      <LineId Id="171" Count="0" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="174" Count="5" />
+      <LineId Id="181" Count="2" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

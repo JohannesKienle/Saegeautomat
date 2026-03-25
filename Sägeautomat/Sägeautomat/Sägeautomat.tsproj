@@ -1,0 +1,239 @@
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.74" TcVersionFixed="true">
+	<Project ProjectGUID="{22703503-706D-4051-BB38-98D2D2F38EDF}" TargetNetId="39.27.128.46.1.1" Target64Bit="true" ShowHideConfigurations="#x6">
+		<System>
+			<Tasks>
+				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
+					<Name>PlcTask</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{D08C4EBE-2D7B-4BDC-BDE2-A4B99FE7CFA9}" Name="MAIN" PrjFilePath="MAIN\MAIN.plcproj" TmcFilePath="MAIN\MAIN.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="MAIN\MAIN.tmc" TmcHash="{62D9DC45-1A25-F6BE-6D62-DBD0DAE0F227}">
+					<Name>MAIN Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="1">
+						<Name>PlcTask Inputs</Name>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_BetriebsArt_Referenz</Name>
+							<Comment><![CDATA[Eingänge Bedienung
+Organisatorisches]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_BetriebsArt_Warmlauf</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_BetriebsArt_Automatik</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_BetriebsArt_Manuell</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Kein_Notaus</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Maschine_EIN</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Hydraulik_EIN</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Maschine_AUS</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Hydraulik_AUS</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Kettenschmierung_Manuell_EIN</Name>
+							<Comment><![CDATA[Manuelle Bedienung]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Zufuehrer_Vor</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Zufuehrer_Rueck</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Stammklemmer_Oben_Hoch</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Stammklemmer_Oben_Runter</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Stammklemmer_Unten_Hoch</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Stammklemmer_Unten_Runter</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Saege_EIN</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Saege_AUS</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Saege_Hoch</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Saege_Runter</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Programm_Einzelsatz</Name>
+							<Comment><![CDATA[Automatikmodus]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Zyklus_Start</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Zyklus_Stopp</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endlage_Zufuehrer_Hinten</Name>
+							<Comment><![CDATA[Eingänge Sensorik
+Zuführer]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endlage_Zufuehrer_Vorne</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Vorposition_Zufuehrer</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Schaltausg_Distanzsensor_Holzende</Name>
+							<Comment><![CDATA[Über Schaltausgang oder IO-Link Analogdaten?]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endl_Obere_Stammklemmung_Oben</Name>
+							<Comment><![CDATA[Stammklemmung Oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endl_Obere_Stammklemmung_Unten</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endl_Tastschiene</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Schaltausg_Druckschalter_Obere_Klemmung</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endl_Untere_Stammklemmung_Oben</Name>
+							<Comment><![CDATA[Stammklemmung Unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endl_Untere_Stammklemmung_Unten</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endl_Saege_Oben</Name>
+							<Comment><![CDATA[Säge]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Endl_Saege_Unten</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.IN_Kettenoel_nicht_Leer</Name>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" AreaNo="1">
+						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Meldeleuchte_Rot</Name>
+							<Comment><![CDATA[Rot Leuchten: Fehler, Rot Blinken: Kettenöl leer]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Meldeleuchte_Gelb</Name>
+							<Comment><![CDATA[Gelb Leuchten:Referenz fehlt, Gelb Blinken: Zyklus beendet]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Meldeleuchte_Gruen</Name>
+							<Comment><![CDATA[Grün Leuchten: Zyklus läuft, Grün Blinken: Zyklus läuft(warten auf weiterschalten)]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Stammklemmung_Oben_Hoch</Name>
+							<Comment><![CDATA[Ausgänge Hydraulik]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Stammklemmung_Oben_Runter</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Stammklemmung_Unten_Hoch</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Stammklemmung_Unten_Runter</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Saege_Senken</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Saege_Heben</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Saegeautomat.OUT_Hydraulikpumpe_EIN</Name>
+							<Comment><![CDATA[Ausgänge Schalten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+					</Vars>
+					<Contexts>
+						<Context>
+							<Id>0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
+						</Context>
+					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+		</Plc>
+	</Project>
+</TcSmProject>

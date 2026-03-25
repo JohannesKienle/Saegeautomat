@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Refactors>
+  <Renames>
+    <RenamedType>
+      <Type guid="389c9999-3a59-4eae-a5d7-775f0832929f">AUTOMATIKBETRIEB</Type>
+      <From>POU</From>
+      <To>Automatik_Betrieb</To>
+    </RenamedType>
+  </Renames>
+</Refactors>

@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="Meldeleuchte" Id="{2af90734-1522-40fa-8099-640c815b617b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Meldeleuchte
+VAR_INPUT
+	Zyklus_beendet : BOOL;
+	Maschine_EIN : BOOL;
+	Fehler_liegt_an : BOOL;
+	Kettenschmierung_nicht_leer : BOOL;
+	Busy : BOOL;
+	Warten_auf_weiterschalten : BOOL;
+	Referenz_gefahren : BOOL;
+	
+END_VAR
+VAR_OUTPUT
+	Meldeleuchte_Rot : BOOL;
+	Meldeleuchte_Gelb : BOOL;
+	Meldeleuchte_Gruen : BOOL;
+END_VAR
+VAR
+	Impulsgeber : BLINK;
+	TON_Timer_Impuls : TON;
+	TON_Timer_Pause : TON;
+	Impuls_Zeit : TIME := T#500MS;
+	Pause_Zeit : TIME := T#500MS;
+	Impuls : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Meldeleuchte_Rot := Meldeleuchte_Gelb := Meldeleuchte_Gruen := FALSE;
+
+Impulsgeber(
+	ENABLE := TRUE,
+	TIMELOW := Pause_Zeit,
+	TIMEHIGH := Impuls_Zeit,
+	OUT => Impuls);
+
+IF Maschine_EIN AND NOT Referenz_gefahren THEN
+	Meldeleuchte_Gelb := TRUE;
+ELSIF Maschine_EIN AND Zyklus_beendet THEN
+	Meldeleuchte_Gelb := Impuls;
+END_IF
+
+IF Maschine_EIN AND Fehler_liegt_an THEN
+	Meldeleuchte_Rot := TRUE;
+ELSIF Maschine_EIN AND NOT Fehler_liegt_an AND NOT Kettenschmierung_nicht_leer THEN
+	Meldeleuchte_Rot := Impuls;
+END_IF
+
+IF Maschine_EIN AND Busy AND NOT Warten_auf_weiterschalten THEN 
+	Meldeleuchte_Gruen := TRUE;
+ELSIF Maschine_EIN AND Busy AND Warten_auf_weiterschalten THEN
+	Meldeleuchte_Gruen := Impuls;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="Meldeleuchte">
+      <LineId Id="23" Count="0" />
+      <LineId Id="127" Count="1" />
+      <LineId Id="130" Count="3" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="51" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

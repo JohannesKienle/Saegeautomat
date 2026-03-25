@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="Hydr_Ventil" Id="{29cdd559-d071-4238-aff4-d0f9f8f5fb20}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Hydr_Ventil
+VAR_INPUT
+	Funktion_A : BOOL;
+	Funktion_B : BOOL;
+	Andere_Ventile_in_Ruhestellung : BOOL;
+END_VAR
+VAR_OUTPUT
+	Spule_A_Aktiv : BOOL;
+	Spule_B_Aktiv : BOOL;
+	Status_Invalide : BOOL;
+	Ruhestellung : BOOL;
+	Warte_auf_anderes_Ventil : BOOL;
+END_VAR
+VAR
+	OUT_Spule_A AT %Q* : BOOL;
+	OUT_Spule_B AT %Q*: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF Andere_Ventile_in_Ruhestellung THEN
+	OUT_Spule_A := Funktion_A AND NOT Funktion_B;
+	Spule_A_Aktiv := OUT_Spule_A;
+	OUT_Spule_B := Funktion_B AND NOT Funktion_A;
+	Spule_B_Aktiv := OUT_Spule_B;
+ELSE 
+	OUT_Spule_A := FALSE;
+	OUT_Spule_B := FALSE;
+END_IF
+
+Status_Invalide := Funktion_A AND Funktion_B;
+
+Ruhestellung := NOT OUT_Spule_A AND NOT OUT_Spule_B;
+
+Warte_auf_anderes_Ventil := Funktion_A OR Funktion_B AND NOT Andere_Ventile_in_Ruhestellung;]]></ST>
+    </Implementation>
+    <LineIds Name="Hydr_Ventil">
+      <LineId Id="45" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="33" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
