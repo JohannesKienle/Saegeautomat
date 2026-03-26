@@ -10,7 +10,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{D08C4EBE-2D7B-4BDC-BDE2-A4B99FE7CFA9}" Name="MAIN" PrjFilePath="MAIN\MAIN.plcproj" TmcFilePath="MAIN\MAIN.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="MAIN\MAIN.tmc" TmcHash="{62D9DC45-1A25-F6BE-6D62-DBD0DAE0F227}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="MAIN\MAIN.tmc" TmcHash="{E91F3726-3767-306E-4CE6-A567E6B2EA78}">
 					<Name>MAIN Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -112,13 +112,13 @@ Organisatorisches]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Saegeautomat.IN_Endlage_Zufuehrer_Hinten</Name>
+							<Name>MAIN.Saegeautomat.IN_Endl_Zufuehrer_Hinten</Name>
 							<Comment><![CDATA[Eingänge Sensorik
 Zuführer]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Saegeautomat.IN_Endlage_Zufuehrer_Vorne</Name>
+							<Name>MAIN.Saegeautomat.IN_Endl_Zufuehrer_Vorne</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>

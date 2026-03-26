@@ -9,7 +9,9 @@ VAR_INPUT
 	Zyklus_Start : BOOL;
 	Zyklus_Stopp : BOOL;
 	//Merker
-	
+	SFCInit : BOOL;
+	SFCTip : BOOL;
+	SFCTipMode : BOOL;
 	//Sensoren	
 	Endl_Saege_Oben : BOOL;
 	Endl_Obere_Stammklemmung_Oben : BOOL;
@@ -32,11 +34,6 @@ VAR_IN_OUT
 	
 END_VAR
 VAR
-	Delay_2s : TON;
-	Delay : TIME := T#2S;
-	SFCInit : BOOL;
-	SFCTip : BOOL;
-	SFCTipMode : BOOL;
 END_VAR
 
 ]]></Declaration>
@@ -355,7 +352,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"Kein_Notaus AND Zyklus_Start AND Referenz_Gefahren = False AND NOT busy"</v>
+                            <v n="Value">"Kein_Notaus AND Zyklus_Start AND NOT busy"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">376L</v>
@@ -520,7 +517,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{a2621e18-7de3-4ea6-ae6d-89e9e0b7befd}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"HydraulikEin_exit"</v>
+                            <v n="Value">""</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">61L</v>
@@ -1883,25 +1880,26 @@ Zyklus_Beendet := TRUE;
     <Action Name="Hydraulik_An_active" Id="{7246612a-4487-4a08-a6b6-376711e720c2}">
       <Implementation>
         <ST><![CDATA[Hydraulik_EIN := TRUE;
-Delay_2s(IN := TRUE, PT	:= Delay);
+
 ]]></ST>
       </Implementation>
     </Action>
     <Action Name="Hydraulik_An_exit" Id="{31f64795-c125-4cb1-8e29-4526fbdc7e2f}">
       <Implementation>
-        <ST><![CDATA[Delay_2s(IN := FALSE);
+        <ST><![CDATA[
 
 ]]></ST>
-      </Implementation>
-    </Action>
-    <Action Name="HydraulikEin_exit" Id="{f41e535b-b2cf-4132-942b-286e68a877c6}">
-      <Implementation>
-        <ST><![CDATA[]]></ST>
       </Implementation>
     </Action>
     <Action Name="Reset_entry" Id="{6012bee7-c849-43f8-aa0b-86f30e27c83a}">
       <Implementation>
         <ST><![CDATA[busy := FALSE;
+Hydraulik_EIN := FALSE;
+Saege_Heben := FALSE;
+Stammklemmung_oben_Hoch := FALSE;
+Stammklemmung_unten_Runter := FALSE;
+Zufuehrer_Zurueck := FALSE;
+
 ]]></ST>
       </Implementation>
     </Action>
@@ -2083,11 +2081,8 @@ END_IF]]></ST>
       <LineId Id="3" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="Referenzfahrt.HydraulikEin_exit">
-      <LineId Id="1" Count="0" />
-    </LineIds>
     <LineIds Name="Referenzfahrt.Reset_entry">
-      <LineId Id="2" Count="0" />
+      <LineId Id="2" Count="6" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="Referenzfahrt.Reset_exit">

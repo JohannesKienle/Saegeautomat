@@ -3,8 +3,52 @@
   <POU Name="Manueller_Betrieb" Id="{ac3c5180-7042-481e-a944-4bd75763f607}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK Manueller_Betrieb
 VAR_INPUT
+	Kein_Notaus : BOOL;
+	Hydraulik_EIN : BOOL;
+	Hydraulik_AUS : BOOL;
+	Kettenschmierung_Manuell_EIN : BOOL;
+	Zufuehrer_Vor : BOOL;
+	Zufuehrer_Rueck : BOOL;
+	Stammklemmer_Oben_Hoch : BOOL;
+	Stammklemmer_Oben_Runter : BOOL;
+	Stammklemmer_Unten_Hoch : BOOL;
+	Stammklemmer_Unten_Runter : BOOL;
+	Saege_EIN : BOOL;
+	Saege_AUS : BOOL;
+	Saege_Hoch : BOOL;
+	Saege_Runter : BOOL;
+	
+	//Eingänge Sensorik
+	//Zuführer
+	Endl_Zufuehrer_Hinten : BOOL;
+	Endl_Zufuehrer_Vorne : BOOL;
+	Vorposition_Zufuehrer : BOOL;
+	Schaltausg_Distanzsensor_Holzende : BOOL; //Über Schaltausgang oder IO-Link Analogdaten?
+	//Stammklemmung Oben
+	Endl_Obere_Stammklemmung_Oben : BOOL;
+	Endl_Obere_Stammklemmung_Unten : BOOL;
+	Endl_Tastschiene : BOOL;
+	Schaltausg_Druckschalter_Obere_Klemmung : BOOL;
+	//Stammklemmung Unten
+	Endl_Untere_Stammklemmung_Oben : BOOL;
+	Endl_Untere_Stammklemmung_Unten : BOOL;
+	//Säge
+	Endl_Saege_Oben : BOOL;
+	Endl_Saege_Unten : BOOL;
+	Kettenoel_nicht_Leer : BOOL;
 END_VAR
 VAR_OUTPUT
+	//Ausgänge Hydraulik
+	Stammklemmung_Oben_Hoch : BOOL;
+	Stammklemmung_Oben_Runter : BOOL;
+	Stammklemmung_Unten_Hoch : BOOL;
+	Stammklemmung_Unten_Runter : BOOL;
+	Saege_Senken : BOOL;
+	Saege_Heben : BOOL;
+	//Ausgänge Schalten
+	Hydraulikpumpe_EIN : BOOL;
+	//Ausgänge Daten
+	//FU DATEN
 END_VAR
 VAR
 END_VAR
