@@ -1,0 +1,15 @@
+Id;Default
+773;A
+944;Autoatikbetrieb
+601;Hydraulik EIN
+473;Kein Notaus
+194;M
+891;Manueller Betrieb
+390;Maschine EIN
+28;R
+320;Referenzfahrt
+216;Text
+214;W
+30;Warmlauf
+904;Zyklus Start
+281;Zyklus Stopp

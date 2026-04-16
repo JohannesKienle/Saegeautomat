@@ -1,0 +1,11 @@
+Id;Default
+16#01;ParamUploadStart
+16#02;ParamUploadEnd
+16#03;ParamDownloadStart
+16#04;ParamDownloadEnd
+16#05;ParamDownloadStore
+16#06;ParamBreak
+16#80;DeviceReset
+16#81;ApplicationReset
+16#82;RestoreFactorySettings
+;

@@ -24,6 +24,8 @@ VAR_OUTPUT
 	Stammklemmung_oben_Hoch : BOOL;
 	Stammklemmung_unten_Runter : BOOL;
 	Zufuehrer_Zurueck : BOOL;
+	Warten_Auf_Weiterschalten : BOOL;
+
 END_VAR
 VAR_IN_OUT
 	//Merker
@@ -1881,7 +1883,9 @@ Zyklus_Beendet := TRUE;
       <Implementation>
         <ST><![CDATA[Hydraulik_EIN := TRUE;
 
-]]></ST>
+IF Kein_Notaus AND Zyklus_Start AND NOT busy AND Programm_Einzelsatz THEN 
+	Warten_Auf_Weiterschalten := TRUE;
+END_IF]]></ST>
       </Implementation>
     </Action>
     <Action Name="Hydraulik_An_exit" Id="{31f64795-c125-4cb1-8e29-4526fbdc7e2f}">
@@ -2074,7 +2078,10 @@ END_IF]]></ST>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="Referenzfahrt.Hydraulik_An_active">
-      <LineId Id="1" Count="2" />
+      <LineId Id="1" Count="0" />
+      <LineId Id="7" Count="1" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="12" Count="0" />
     </LineIds>
     <LineIds Name="Referenzfahrt.Hydraulik_An_exit">
       <LineId Id="1" Count="0" />

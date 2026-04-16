@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <ImagePool Name="ImagePool" Id="{10c772a8-a362-453b-a114-746f5e21c6b7}">
+    <XmlArchive>
+      <Data>
+        <o xml:space="preserve" t="ImagePoolObject">
+          <v n="UniqueIdGenerator">"11"</v>
+          <l n="BitmapPool" t="ArrayList" cet="ImagePoolItem">
+            <o>
+              <v n="BitmapID">"1"</v>
+              <v n="FileID">"5ce3da45-db07-42e7-a21c-a00fff4ed8f6|C:\Users\johan\Downloads\20260413_161747890_iOS.png"</v>
+              <v n="ItemID">1</v>
+            </o>
+            <o>
+              <v n="BitmapID">"2"</v>
+              <v n="FileID">"5ce3da45-db07-42e7-a21c-a00fff4ed8f6|C:\Users\johan\Pictures\Screenshots\Screenshot 2026-04-13 182612.png"</v>
+              <v n="ItemID">2</v>
+            </o>
+            <o>
+              <v n="BitmapID">"3"</v>
+              <v n="FileID">"5ce3da45-db07-42e7-a21c-a00fff4ed8f6|C:\Users\johan\Pictures\Screenshots\Screenshot 2026-04-13 183148.png"</v>
+              <v n="ItemID">6</v>
+            </o>
+            <o>
+              <v n="BitmapID">""</v>
+              <v n="FileID">""</v>
+              <v n="ItemID">9</v>
+            </o>
+          </l>
+          <v n="GuidInit">{6b225475-e900-48fd-bcf4-5d1dec0cb102}</v>
+          <v n="GuidReInit">{ea501264-fa98-4399-b1af-bac16251af31}</v>
+          <v n="GuidExitX">{c41b3f30-81df-4889-8c24-a74a5d54c417}</v>
+          <v n="ValidIds">false</v>
+        </o>
+      </Data>
+      <TypeList>
+        <Type n="ArrayList">System.Collections.ArrayList</Type>
+        <Type n="Boolean">System.Boolean</Type>
+        <Type n="Guid">System.Guid</Type>
+        <Type n="ImagePoolItem">{215b2719-0347-4e4d-ba85-8bcd66946f66}</Type>
+        <Type n="ImagePoolObject">{bb0b9044-714e-4614-ad3e-33cbdf34d16b}</Type>
+        <Type n="Int32">System.Int32</Type>
+        <Type n="String">System.String</Type>
+      </TypeList>
+    </XmlArchive>
+  </ImagePool>
+</TcPlcObject>

@@ -18,10 +18,19 @@
     <LibraryReferences>{e4a40579-5f78-408a-8aaf-d58d4e5f647d}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\ImagePool.TcIPO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Grundfunktionen\OID200DatenLesen.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Unterfunktionen\Ansteuerung_Ausgaenge.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Unterfunktionen\Automatik_Betrieb.TcPOU">
@@ -34,6 +43,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Unterfunktionen\Referenzfahrt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Unterfunktionen\VISU.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Unterfunktionen\Warmlauf.TcPOU">
@@ -51,6 +63,13 @@
     <Compile Include="Visualisierungsmanager.TcVMO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VISUs\Visualization.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualisierungsmanager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISU_TASK.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
@@ -61,6 +80,10 @@
     <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="CmpBitmapPool">
+      <DefaultResolution>CmpBitmapPool, * (System)</DefaultResolution>
+      <Namespace>CmpBitmapPool</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="System_VisuElemMeter">
       <DefaultResolution>VisuElemMeter, 3.5.13.0 (System)</DefaultResolution>
       <Namespace>VisuElemMeter</Namespace>
@@ -111,12 +134,17 @@
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_IoLink">
+      <DefaultResolution>Tc3_IoLink, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_IoLink</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Util">
       <DefaultResolution>Util, * (System)</DefaultResolution>
+      <Namespace>Util</Namespace>
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>

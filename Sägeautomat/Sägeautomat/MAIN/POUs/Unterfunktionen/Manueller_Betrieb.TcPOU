@@ -4,6 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK Manueller_Betrieb
 VAR_INPUT
 	Kein_Notaus : BOOL;
+	//Taster auf Bedienfeld
 	Hydraulik_EIN : BOOL;
 	Hydraulik_AUS : BOOL;
 	Kettenschmierung_Manuell_EIN : BOOL;
@@ -23,7 +24,6 @@ VAR_INPUT
 	Endl_Zufuehrer_Hinten : BOOL;
 	Endl_Zufuehrer_Vorne : BOOL;
 	Vorposition_Zufuehrer : BOOL;
-	Schaltausg_Distanzsensor_Holzende : BOOL; //Über Schaltausgang oder IO-Link Analogdaten?
 	//Stammklemmung Oben
 	Endl_Obere_Stammklemmung_Oben : BOOL;
 	Endl_Obere_Stammklemmung_Unten : BOOL;
@@ -35,18 +35,21 @@ VAR_INPUT
 	//Säge
 	Endl_Saege_Oben : BOOL;
 	Endl_Saege_Unten : BOOL;
-	Kettenoel_nicht_Leer : BOOL;
 END_VAR
 VAR_OUTPUT
 	//Ausgänge Hydraulik
-	Stammklemmung_Oben_Hoch : BOOL;
-	Stammklemmung_Oben_Runter : BOOL;
-	Stammklemmung_Unten_Hoch : BOOL;
-	Stammklemmung_Unten_Runter : BOOL;
-	Saege_Senken : BOOL;
-	Saege_Heben : BOOL;
+	QStammklemmung_Oben_Hoch : BOOL;
+	QStammklemmung_Oben_Runter : BOOL;
+	QStammklemmung_Unten_Hoch : BOOL;
+	QStammklemmung_Unten_Runter : BOOL;
+	QSaege_Senken : BOOL;
+	QSaege_Heben : BOOL;
 	//Ausgänge Schalten
-	Hydraulikpumpe_EIN : BOOL;
+	QHydraulikpumpe_EIN : BOOL;
+	QZufuehrer_Antrieb_vor : BOOL;
+	QZufuehrer_Antrieb_Rueck : BOOL;
+	QSaege_Antrieb_Ein : BOOL;
+	QKettenschmierung_EIN : BOOL;
 	//Ausgänge Daten
 	//FU DATEN
 END_VAR
@@ -54,10 +57,64 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[QStammklemmung_Oben_Hoch :=
+QStammklemmung_Oben_Runter := 
+QStammklemmung_Unten_Hoch := 
+QStammklemmung_Unten_Runter := 
+QSaege_Senken := 
+QSaege_Heben := 
+QHydraulikpumpe_EIN := 
+QZufuehrer_Antrieb_vor := 
+QZufuehrer_Antrieb_Rueck := 
+QSaege_Antrieb_Ein := 
+QKettenschmierung_EIN := FALSE;
+
+//Funktionen mit Hydraulik
+IF QHydraulikpumpe_EIN THEN
+	QStammklemmung_Oben_Hoch := Stammklemmer_Oben_Hoch AND NOT Stammklemmer_Oben_Runter;
+	QStammklemmung_Oben_Runter := Stammklemmer_Oben_Runter AND NOT Stammklemmer_Oben_Hoch;
+	QStammklemmung_Unten_Hoch := Stammklemmer_Unten_Hoch AND NOT Stammklemmer_Unten_Runter;
+	QStammklemmung_Unten_Runter := Stammklemmer_Unten_Runter AND NOT Stammklemmer_Unten_Hoch;
+	QSaege_Senken := Saege_Runter AND NOT Saege_Hoch;
+	QSaege_Heben := Saege_Hoch AND NOT Saege_Runter;
+END_IF
+
+//Funktionen ohne Hydraulik
+IF Hydraulik_EIN THEN
+	QHydraulikpumpe_EIN := TRUE;
+ELSIF Hydraulik_AUS THEN
+	QHydraulikpumpe_EIN := FALSE;
+END_IF
+
+QZufuehrer_Antrieb_vor := Zufuehrer_Vor AND NOT Zufuehrer_Rueck;
+QZufuehrer_Antrieb_Rueck := Zufuehrer_Rueck AND NOT Zufuehrer_Vor;
+
+QSaege_Antrieb_Ein := Saege_EIN;
+
+]]></ST>
     </Implementation>
     <LineIds Name="Manueller_Betrieb">
+      <LineId Id="97" Count="0" />
+      <LineId Id="108" Count="4" />
+      <LineId Id="114" Count="3" />
+      <LineId Id="66" Count="1" />
+      <LineId Id="65" Count="0" />
       <LineId Id="9" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="78" Count="4" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="85" Count="2" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="94" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="95" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="90" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

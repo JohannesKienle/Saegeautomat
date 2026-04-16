@@ -4,7 +4,78 @@
     <XmlArchive>
       <Data>
         <o xml:space="preserve" t="GlobalTextListObject">
-          <l n="TextList" t="ArrayList" />
+          <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"773"</v>
+              <v n="TextDefault">"A"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"944"</v>
+              <v n="TextDefault">"Autoatikbetrieb"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"601"</v>
+              <v n="TextDefault">"Hydraulik EIN"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"473"</v>
+              <v n="TextDefault">"Kein Notaus"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"194"</v>
+              <v n="TextDefault">"M"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"891"</v>
+              <v n="TextDefault">"Manueller Betrieb"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"390"</v>
+              <v n="TextDefault">"Maschine EIN"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"28"</v>
+              <v n="TextDefault">"R"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"320"</v>
+              <v n="TextDefault">"Referenzfahrt"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"216"</v>
+              <v n="TextDefault">"Text"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"214"</v>
+              <v n="TextDefault">"W"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"30"</v>
+              <v n="TextDefault">"Warmlauf"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"904"</v>
+              <v n="TextDefault">"Zyklus Start"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"281"</v>
+              <v n="TextDefault">"Zyklus Stopp"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+          </l>
           <l n="Languages" t="ArrayList" />
           <v n="GuidInit">{1c72ee24-454f-4993-99f8-7b54bf10ea05}</v>
           <v n="GuidReInit">{54957ed8-cc7a-46d0-8d46-2f4839bef8dd}</v>
@@ -15,6 +86,8 @@
         <Type n="ArrayList">System.Collections.ArrayList</Type>
         <Type n="GlobalTextListObject">{63784cbb-9ba0-45e6-9d69-babf3f040511}</Type>
         <Type n="Guid">System.Guid</Type>
+        <Type n="String">System.String</Type>
+        <Type n="TextListRow">{53da1be7-ad25-47c3-b0e8-e26286dad2e0}</Type>
       </TypeList>
     </XmlArchive>
   </GlobalTextList>

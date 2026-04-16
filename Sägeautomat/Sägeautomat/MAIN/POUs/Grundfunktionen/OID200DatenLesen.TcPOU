@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="OID200DatenLesen" Id="{47a6d6f6-41a7-4f16-9025-b533b11dc6a1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK OID200DatenLesen
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	
+	iOID200Dist_zu_Holz : UINT;
+	OID200SchaltSignal : BOOL;
+	
+END_VAR
+VAR
+	
+	ProzessDatenOID200 AT %I* : ARRAY[0..1] OF BYTE;
+	ProzessdatenWortOID200 : WORD;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ProzessDatenWortOID200 := BYTE_TO_WORD(ProzessdatenOID200[1]) OR SHL(BYTE_TO_WORD(ProzessdatenOID200[0]), 8);
+iOID200Dist_zu_Holz := WORD_TO_UINT(SHR(ProzessdatenWortOID200, 4));
+OID200SchaltSignal := ProzessDatenOID200[1].0;]]></ST>
+    </Implementation>
+    <LineIds Name="OID200DatenLesen">
+      <LineId Id="10" Count="1" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

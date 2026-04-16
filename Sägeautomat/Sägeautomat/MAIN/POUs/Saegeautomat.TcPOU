@@ -41,7 +41,8 @@ VAR
 	IN_Endl_Zufuehrer_Hinten AT %I* : BOOL;
 	IN_Endl_Zufuehrer_Vorne AT %I* : BOOL;
 	IN_Vorposition_Zufuehrer AT %I* : BOOL;
-	IN_Schaltausg_Distanzsensor_Holzende AT %I* : BOOL; //Über Schaltausgang oder IO-Link Analogdaten?
+	IOL_Schaltausg_Distanzsensor_Holzende : BOOL; //Über Schaltausgang oder IO-Link Analogdaten?
+	IOL_DistanzSensor_Abst : UINT;
 	//Stammklemmung Oben
 	IN_Endl_Obere_Stammklemmung_Oben AT %I* : BOOL;
 	IN_Endl_Obere_Stammklemmung_Unten AT %I* : BOOL;
@@ -56,21 +57,13 @@ VAR
 	IN_Kettenoel_nicht_Leer AT %I* : BOOL;
 	
 	//Ausgänge
-	//Organisatorisches
-	OUT_Meldeleuchte_Rot AT %Q* : BOOL;//Rot Leuchten: Fehler, Rot Blinken: Kettenöl leer
-	OUT_Meldeleuchte_Gelb AT %Q* : BOOL;//Gelb Leuchten:Referenz fehlt, Gelb Blinken: Zyklus beendet
-	OUT_Meldeleuchte_Gruen AT %Q* : BOOL;//Grün Leuchten: Zyklus läuft, Grün Blinken: Zyklus läuft(warten auf weiterschalten)
 	//Ausgänge Hydraulik
-	OUT_Stammklemmung_Oben_Hoch AT %Q* : BOOL;
-	OUT_Stammklemmung_Oben_Runter AT %Q* : BOOL;
-	OUT_Stammklemmung_Unten_Hoch AT %Q* : BOOL;
-	OUT_Stammklemmung_Unten_Runter AT %Q* : BOOL;
-	OUT_Saege_Senken AT %Q* : BOOL;
-	OUT_Saege_Heben AT %Q* : BOOL;
+	
 	//Ausgänge Schalten
 	OUT_Hydraulikpumpe_EIN AT %Q* : BOOL;
 	//Ausgänge Daten
-		//Ausgang zu FU für Säge und zuführer
+	
+	
 		
 		
 	//Interne Merker
@@ -79,21 +72,28 @@ VAR
 	Referenz_gefahren : BOOL;
 	Zyklus_beendet : BOOL;
 	busy : BOOL;
+	warten : BOOL;
+	
 	
 	Referenzfahrt : Referenzfahrt;
 	Warmlauf : Warmlauf;
 	Manueller_Betrieb : Manueller_Betrieb;
 	Automatikbetrieb : Automatik_Betrieb;
 	Steuerung_Meldeleuchten : Meldeleuchte;
+	OID200 : OID200DatenLesen;
+	Ansteuerung_Ausgaenge : Ansteuerung_Ausgaenge;
 	
 	P_Flanke_Zyklus_Stopp : R_TRIG;
 	P_Flanke_Zyklus_Start : R_TRIG;
+	
+
 	
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[P_Flanke_Zyklus_Stopp(CLK := IN_Zyklus_Stopp);
 P_Flanke_Zyklus_Start(CLK := IN_Zyklus_Start);
+
 IF IN_Kein_Notaus AND IN_Maschine_EIN THEN
 	Maschine_EIN := TRUE;
 ELSIF NOT IN_Kein_Notaus OR IN_Maschine_AUS THEN
@@ -123,31 +123,105 @@ IF Maschine_EIN AND IN_BetriebsArt_Warmlauf THEN
 END_IF
 
 IF Maschine_EIN AND IN_BetriebsArt_Manuell THEN
-	Manueller_Betrieb();
+	Manueller_Betrieb(
+		Kein_Notaus:= IN_Kein_Notaus, 
+		Hydraulik_EIN:= IN_Hydraulik_EIN, 
+		Hydraulik_AUS:= IN_Hydraulik_AUS, 
+		Kettenschmierung_Manuell_EIN:= IN_Kettenschmierung_Manuell_EIN, 
+		Zufuehrer_Vor:= IN_Zufuehrer_Vor, 
+		Zufuehrer_Rueck:= IN_Zufuehrer_Rueck, 
+		Stammklemmer_Oben_Hoch:= IN_Stammklemmer_Oben_Hoch, 
+		Stammklemmer_Oben_Runter:= IN_Stammklemmer_Oben_Runter, 
+		Stammklemmer_Unten_Hoch:= IN_Stammklemmer_Unten_Hoch, 
+		Stammklemmer_Unten_Runter:= IN_Stammklemmer_Unten_Runter, 
+		Saege_EIN:= IN_Saege_EIN, 
+		Saege_AUS:= IN_Saege_AUS, 
+		Saege_Hoch:= IN_Saege_Hoch, 
+		Saege_Runter:= IN_Saege_Runter, 
+		Endl_Zufuehrer_Hinten:= IN_Endl_Zufuehrer_Hinten, 
+		Endl_Zufuehrer_Vorne:= IN_Endl_Zufuehrer_Vorne, 
+		Vorposition_Zufuehrer:= IN_Vorposition_Zufuehrer,  
+		Endl_Obere_Stammklemmung_Oben:= IN_Endl_Obere_Stammklemmung_Oben, 
+		Endl_Obere_Stammklemmung_Unten:= IN_Endl_Obere_Stammklemmung_Unten, 
+		Endl_Tastschiene:= IN_Endl_Tastschiene, 
+		Schaltausg_Druckschalter_Obere_Klemmung:= IN_Schaltausg_Druckschalter_Obere_Klemmung, 
+		Endl_Untere_Stammklemmung_Oben:= IN_Endl_Untere_Stammklemmung_Oben, 
+		Endl_Untere_Stammklemmung_Unten:= IN_Endl_Untere_Stammklemmung_Unten, 
+		Endl_Saege_Oben:= IN_Endl_Saege_Oben, 
+		Endl_Saege_Unten:= IN_Endl_Saege_Unten, 
+		);
+	
 END_IF
 
 IF Maschine_EIN AND IN_BetriebsArt_Automatik THEN
-	Automatikbetrieb();
+	Automatikbetrieb(
+	Kein_Notaus:= IN_Kein_Notaus, 
+	Zyklus_Start:= IN_Zyklus_Start, 
+	Zyklus_Stopp:= IN_Zyklus_Stopp, 
+	SFCInit:= IN_Zyklus_Stopp, 
+	SFCTip:= , 
+	SFCTipMode:= , 
+	Endl_Zufuehrer_Hinten:= IN_Endl_Zufuehrer_Hinten, 
+	Endl_Zufuehrer_Vorne:= IN_Endl_Zufuehrer_Vorne, 
+	Vorposition_Zufuehrer:= IN_Vorposition_Zufuehrer, 
+	IOL_Schaltausg_Distanzsensor_Holzende:= IOL_Schaltausg_Distanzsensor_Holzende, 
+	IOL_DistanzSensor_Abst:= IOL_DistanzSensor_Abst, 
+	Endl_Obere_Stammklemmung_Oben:= IN_Endl_Obere_Stammklemmung_Oben, 
+	Endl_Obere_Stammklemmung_Unten:= IN_Endl_Obere_Stammklemmung_Unten, 
+	Endl_Tastschiene:= IN_Endl_Tastschiene, 
+	Schaltausg_Druckschalter_Obere_Klemmung:= IN_Schaltausg_Druckschalter_Obere_Klemmung, 
+	Endl_Untere_Stammklemmung_Oben:= IN_Endl_Untere_Stammklemmung_Oben, 
+	Endl_Untere_Stammklemmung_Unten:= IN_Endl_Untere_Stammklemmung_Unten, 
+	Endl_Saege_Oben:= IN_Endl_Saege_Oben, 
+	Endl_Saege_Unten:= IN_Endl_Saege_Unten, 
+	Warten_Auf_Weiterschalten=> , 
+	Warten_auf_Material=> , 
+	QStammklemmung_Oben_Hoch=> , 
+	QStammklemmung_Oben_Runter=> , 
+	QStammklemmung_Unten_Hoch=> , 
+	QStammklemmung_Unten_Runter=> , 
+	QSaege_Senken=> , 
+	QSaege_Heben=> , 
+	QHydraulikpumpe_EIN=> , 
+	QZufuehrer_Antrieb_vor=> , 
+	QZufuehrer_Antrieb_Rueck=> , 
+	QSaege_Antrieb_Ein=> , 
+	QKettenschmierung_EIN=> , 
+	warten:= warten, 
+	Hydraulik_EIN:= Hydraulik_EIN, 
+	Zyklus_Beendet:= Zyklus_beendet);
 END_IF
 
+Ansteuerung_Ausgaenge(
+	Saege_Hoch:= Referenzfahrt.Saege_Heben OR Manueller_Betrieb.QSaege_Heben OR Automatikbetrieb.QSaege_Heben, 
+	Saege_Runter:= Manueller_Betrieb.Saege_Runter OR Automatikbetrieb.QSaege_Senken, 
+	Stammklemmung_Oben_Hoch:= Referenzfahrt.Stammklemmung_oben_Hoch OR Manueller_Betrieb.QStammklemmung_Oben_Hoch OR Automatikbetrieb.QStammklemmung_Oben_Hoch, 
+	Stammklemmung_Oben_Runter:= Manueller_Betrieb.QStammklemmung_Oben_Runter OR Automatikbetrieb.QStammklemmung_Oben_Runter, 
+	Stammklemmung_Unten_Hoch:= Manueller_Betrieb.QStammklemmung_Unten_Hoch OR Automatikbetrieb.QStammklemmung_Unten_Hoch,
+	Stammklemmung_Unten_Runter:= Referenzfahrt.Stammklemmung_unten_Runter OR Manueller_Betrieb.QStammklemmung_Unten_Runter OR Automatikbetrieb.QStammklemmung_Unten_Runter,
+	Saege_EIN := Manueller_Betrieb.QSaege_Antrieb_Ein OR Automatikbetrieb.QSaege_Antrieb_Ein,
+	Zufuehrer_Vor := Manueller_Betrieb.QZufuehrer_Antrieb_Rueck OR Automatikbetrieb.QZufuehrer_Antrieb_vor,
+	Zufuehrer_Rueck := Referenzfahrt.Zufuehrer_Zurueck OR Manueller_Betrieb.QZufuehrer_Antrieb_Rueck OR Automatikbetrieb.QZufuehrer_Antrieb_Rueck
+);
+
 Steuerung_Meldeleuchten(
-	Maschine_EIN := ,
-	Referenz_gefahren := ,
-	Kettenschmierung_nicht_leer := ,
+	Maschine_EIN := Maschine_EIN,
+	Referenz_gefahren := Referenz_gefahren,
+	Kettenschmierung_nicht_leer := IN_Kettenoel_nicht_Leer,
 	Fehler_liegt_an := ,
-	Busy := ,
-	Warten_auf_weiterschalten := ,
-	Zyklus_beendet := ,
-	Meldeleuchte_Rot => ,
-	Meldeleuchte_Gelb => ,
-	Meldeleuchte_Gruen => );]]></ST>
+	Busy := busy,
+	Warten_auf_weiterschalten := Referenzfahrt.Warten_Auf_Weiterschalten OR FALSE, //Automatikbetrieb.Warten_Auf_Weiterschalten
+	Zyklus_beendet := );
+
+
+OID200();
+]]></ST>
     </Implementation>
     <LineIds Name="Saegeautomat">
       <LineId Id="378" Count="0" />
       <LineId Id="380" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="129" Count="0" />
-      <LineId Id="135" Count="1" />
+      <LineId Id="475" Count="0" />
+      <LineId Id="695" Count="3" />
       <LineId Id="130" Count="0" />
       <LineId Id="147" Count="0" />
       <LineId Id="146" Count="0" />
@@ -165,15 +239,28 @@ Steuerung_Meldeleuchten(
       <LineId Id="154" Count="1" />
       <LineId Id="158" Count="0" />
       <LineId Id="157" Count="0" />
+      <LineId Id="533" Count="17" />
+      <LineId Id="552" Count="7" />
+      <LineId Id="532" Count="0" />
       <LineId Id="159" Count="1" />
       <LineId Id="165" Count="0" />
       <LineId Id="164" Count="0" />
-      <LineId Id="166" Count="1" />
+      <LineId Id="892" Count="34" />
+      <LineId Id="798" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="580" Count="5" />
+      <LineId Id="593" Count="0" />
+      <LineId Id="587" Count="0" />
+      <LineId Id="928" Count="2" />
+      <LineId Id="927" Count="0" />
       <LineId Id="171" Count="0" />
       <LineId Id="170" Count="0" />
       <LineId Id="180" Count="0" />
-      <LineId Id="174" Count="5" />
-      <LineId Id="181" Count="2" />
+      <LineId Id="174" Count="4" />
+      <LineId Id="183" Count="0" />
+      <LineId Id="575" Count="1" />
+      <LineId Id="511" Count="0" />
+      <LineId Id="506" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

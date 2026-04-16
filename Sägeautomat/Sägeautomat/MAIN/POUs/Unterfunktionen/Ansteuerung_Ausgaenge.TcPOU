@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="Ansteuerung_Ausgaenge" Id="{ea79a795-b328-4a33-aa54-2323e17ef219}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Ansteuerung_Ausgaenge
+VAR_INPUT
+	Saege_Hoch : BOOL;
+	Saege_Runter : BOOL;
+	Stammklemmung_Oben_Hoch : BOOL;
+	Stammklemmung_Oben_Runter : BOOL;
+	Stammklemmung_Unten_Hoch : BOOL;
+	Stammklemmung_Unten_Runter : BOOL;
+	Saege_EIN: BOOL;
+	Zufuehrer_Vor : BOOL;
+	Zufuehrer_Rueck : BOOL;
+END_VAR
+VAR_OUTPUT
+	OUT_Saege_Senken AT %Q* : BOOL;
+	OUT_Saege_Heben AT %Q* : BOOL;
+	OUT_Stammklemmung_Oben_Hoch AT %Q* : BOOL;
+	OUT_Stammklemmung_Oben_Runter AT %Q* : BOOL;
+	OUT_Stammklemmung_Unten_Hoch AT %Q* : BOOL;
+	OUT_Stammklemmung_Unten_Runter AT %Q* : BOOL;
+	OUT_Saege_EIN AT %Q* : BOOL;
+	OUT_Zufuehrer_Antrieb_Vor AT %Q* : BOOL;
+	OUT_Zufuehrer_Antrieb_Rueck AT %Q* : BOOL;
+	OUT_Zufuehrer_Antrieb_Enable AT %Q* : BOOL;
+	OUT_Kettenschmierung_EIN AT %Q* : BOOL;
+END_VAR
+VAR
+	Saege : Hydr_Ventil;
+	Stammklemmung_Oben : Hydr_Ventil;
+	Stammklemmung_unten : Hydr_Ventil;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+Saege(
+	Funktion_A:= Saege_Hoch, 
+	Funktion_B:= Saege_Runter, 
+	Andere_Ventile_in_Ruhestellung:= Stammklemmung_Oben.Ruhestellung OR Stammklemmung_unten.Ruhestellung, 
+	OUT_Spule_A=> OUT_Saege_Heben, 
+	OUT_Spule_B=> OUT_Saege_Senken, 
+	Status_Invalide=> , 
+	Warte_auf_anderes_Ventil=> );
+
+OUT_Saege_EIN := Saege_EIN;
+OUT_Kettenschmierung_EIN := OUT_Saege_EIN;
+	
+Stammklemmung_Oben(
+	Funktion_A:= Stammklemmung_Oben_Hoch, 
+	Funktion_B:= Stammklemmung_Oben_Runter, 
+	Andere_Ventile_in_Ruhestellung:= Saege.Ruhestellung OR Stammklemmung_unten.Ruhestellung, 
+	OUT_Spule_A=> OUT_Stammklemmung_Oben_Hoch, 
+	OUT_Spule_B=> OUT_Stammklemmung_Oben_Runter, 
+	Status_Invalide=> , 
+	Warte_auf_anderes_Ventil=> );
+	
+Stammklemmung_unten(
+	Funktion_A:= Stammklemmung_Unten_Hoch, 
+	Funktion_B:= Stammklemmung_Unten_Runter, 
+	Andere_Ventile_in_Ruhestellung:= Saege.Ruhestellung OR Stammklemmung_Oben.Ruhestellung, 
+	OUT_Spule_A=> OUT_Stammklemmung_Unten_Hoch, 
+	OUT_Spule_B=> OUT_Stammklemmung_Unten_Runter, 
+	Status_Invalide=> ,  
+	Warte_auf_anderes_Ventil=> );
+	
+OUT_Zufuehrer_Antrieb_Vor := Zufuehrer_Vor AND NOT Zufuehrer_Rueck;
+OUT_Zufuehrer_Antrieb_Rueck := Zufuehrer_Rueck AND NOT Zufuehrer_Vor;
+OUT_Zufuehrer_Antrieb_Enable := OUT_Zufuehrer_Antrieb_Vor OR OUT_Zufuehrer_Antrieb_Rueck;]]></ST>
+    </Implementation>
+    <LineIds Name="Ansteuerung_Ausgaenge">
+      <LineId Id="88" Count="0" />
+      <LineId Id="14" Count="6" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="24" Count="6" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="34" Count="6" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="141" Count="1" />
+      <LineId Id="147" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

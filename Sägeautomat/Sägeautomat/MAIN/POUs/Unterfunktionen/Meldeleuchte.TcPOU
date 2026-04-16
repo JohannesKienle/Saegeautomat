@@ -9,13 +9,15 @@ VAR_INPUT
 	Kettenschmierung_nicht_leer : BOOL;
 	Busy : BOOL;
 	Warten_auf_weiterschalten : BOOL;
+	Warten_auf_Material : BOOL;
 	Referenz_gefahren : BOOL;
 	
 END_VAR
 VAR_OUTPUT
-	Meldeleuchte_Rot : BOOL;
-	Meldeleuchte_Gelb : BOOL;
-	Meldeleuchte_Gruen : BOOL;
+	OUT_Meldeleuchte_Rot AT %Q* : BOOL;//Rot Leuchten: Fehler, Rot Blinken: Kettenöl leer
+	OUT_Meldeleuchte_Gelb AT %Q* : BOOL;//Gelb Leuchten:Referenz fehlt, Gelb Blinken: Zyklus beendet
+	OUT_Meldeleuchte_Gruen AT %Q* : BOOL;//Grün Leuchten: Zyklus läuft, Grün Blinken: Zyklus läuft(warten auf weiterschalten)
+	
 END_VAR
 VAR
 	Impulsgeber : BLINK;
@@ -27,7 +29,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[Meldeleuchte_Rot := Meldeleuchte_Gelb := Meldeleuchte_Gruen := FALSE;
+      <ST><![CDATA[OUT_Meldeleuchte_Rot := OUT_Meldeleuchte_Gelb := OUT_Meldeleuchte_Gruen := FALSE;
 
 Impulsgeber(
 	ENABLE := TRUE,
@@ -36,21 +38,21 @@ Impulsgeber(
 	OUT => Impuls);
 
 IF Maschine_EIN AND NOT Referenz_gefahren THEN
-	Meldeleuchte_Gelb := TRUE;
+	OUT_Meldeleuchte_Gelb := TRUE;
 ELSIF Maschine_EIN AND Zyklus_beendet THEN
-	Meldeleuchte_Gelb := Impuls;
+	OUT_Meldeleuchte_Gelb := Impuls;
 END_IF
 
 IF Maschine_EIN AND Fehler_liegt_an THEN
-	Meldeleuchte_Rot := TRUE;
+	OUT_Meldeleuchte_Rot := TRUE;
 ELSIF Maschine_EIN AND NOT Fehler_liegt_an AND NOT Kettenschmierung_nicht_leer THEN
-	Meldeleuchte_Rot := Impuls;
+	OUT_Meldeleuchte_Rot := Impuls;
 END_IF
 
 IF Maschine_EIN AND Busy AND NOT Warten_auf_weiterschalten THEN 
-	Meldeleuchte_Gruen := TRUE;
+	OUT_Meldeleuchte_Gruen := TRUE;
 ELSIF Maschine_EIN AND Busy AND Warten_auf_weiterschalten THEN
-	Meldeleuchte_Gruen := Impuls;
+	OUT_Meldeleuchte_Gruen := Impuls;
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="Meldeleuchte">

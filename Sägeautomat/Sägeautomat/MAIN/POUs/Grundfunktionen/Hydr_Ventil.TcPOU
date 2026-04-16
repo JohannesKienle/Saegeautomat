@@ -8,50 +8,45 @@ VAR_INPUT
 	Andere_Ventile_in_Ruhestellung : BOOL;
 END_VAR
 VAR_OUTPUT
-	Spule_A_Aktiv : BOOL;
-	Spule_B_Aktiv : BOOL;
+	OUT_Spule_A : BOOL;
+	OUT_Spule_B : BOOL;
 	Status_Invalide : BOOL;
 	Ruhestellung : BOOL;
 	Warte_auf_anderes_Ventil : BOOL;
 END_VAR
 VAR
-	OUT_Spule_A AT %Q* : BOOL;
-	OUT_Spule_B AT %Q*: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF Andere_Ventile_in_Ruhestellung THEN
-	OUT_Spule_A := Funktion_A AND NOT Funktion_B;
-	Spule_A_Aktiv := OUT_Spule_A;
-	OUT_Spule_B := Funktion_B AND NOT Funktion_A;
-	Spule_B_Aktiv := OUT_Spule_B;
-ELSE 
+      <ST><![CDATA[
+IF Funktion_A AND NOT Funktion_B AND Andere_Ventile_in_Ruhestellung THEN 
+	OUT_Spule_A := TRUE;
+ELSIF NOT Funktion_A THEN 
 	OUT_Spule_A := FALSE;
+END_IF
+
+IF Funktion_B AND NOT Funktion_A AND Andere_Ventile_in_Ruhestellung THEN
+	OUT_Spule_B := TRUE;
+ELSIF NOT Funktion_B THEN 
 	OUT_Spule_B := FALSE;
 END_IF
 
 Status_Invalide := Funktion_A AND Funktion_B;
-
 Ruhestellung := NOT OUT_Spule_A AND NOT OUT_Spule_B;
-
 Warte_auf_anderes_Ventil := Funktion_A OR Funktion_B AND NOT Andere_Ventile_in_Ruhestellung;]]></ST>
     </Implementation>
     <LineIds Name="Hydr_Ventil">
-      <LineId Id="45" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="39" Count="0" />
-      <LineId Id="32" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="48" Count="0" />
-      <LineId Id="47" Count="0" />
-      <LineId Id="49" Count="0" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="33" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="78" Count="3" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="86" Count="1" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="91" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>
