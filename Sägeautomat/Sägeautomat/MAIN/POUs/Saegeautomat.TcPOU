@@ -34,6 +34,7 @@ VAR
 	IN_Programm_Einzelsatz AT %I* : BOOL;
 	IN_Zyklus_Start AT %I* : BOOL;
 	IN_Zyklus_Stopp AT %I* : BOOL;
+	IN_Einfache_Klemmung AT %I* : BOOL;
 	
 	
 	//Eingänge Sensorik
@@ -85,6 +86,7 @@ VAR
 	
 	P_Flanke_Zyklus_Stopp : R_TRIG;
 	P_Flanke_Zyklus_Start : R_TRIG;
+	P_Flanke_Maschine_EIN : R_TRIG;
 	
 
 	
@@ -93,6 +95,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[P_Flanke_Zyklus_Stopp(CLK := IN_Zyklus_Stopp);
 P_Flanke_Zyklus_Start(CLK := IN_Zyklus_Start);
+P_Flanke_Maschine_EIN(CLK := IN_Maschine_EIN);
+
 
 IF IN_Kein_Notaus AND IN_Maschine_EIN THEN
 	Maschine_EIN := TRUE;
@@ -158,9 +162,10 @@ IF Maschine_EIN AND IN_BetriebsArt_Automatik THEN
 	Kein_Notaus:= IN_Kein_Notaus, 
 	Zyklus_Start:= IN_Zyklus_Start, 
 	Zyklus_Stopp:= IN_Zyklus_Stopp, 
+	Einfache_Klemmung := IN_Einfache_Klemmung,
 	SFCInit:= IN_Zyklus_Stopp, 
-	SFCTip:= , 
-	SFCTipMode:= , 
+	SFCTip:= IN_Programm_Einzelsatz AND IN_Zyklus_Start, 
+	SFCTipMode:= IN_Programm_Einzelsatz, 
 	Endl_Zufuehrer_Hinten:= IN_Endl_Zufuehrer_Hinten, 
 	Endl_Zufuehrer_Vorne:= IN_Endl_Zufuehrer_Vorne, 
 	Vorposition_Zufuehrer:= IN_Vorposition_Zufuehrer, 
@@ -200,9 +205,20 @@ Ansteuerung_Ausgaenge(
 	Stammklemmung_Unten_Hoch:= Manueller_Betrieb.QStammklemmung_Unten_Hoch OR Automatikbetrieb.QStammklemmung_Unten_Hoch,
 	Stammklemmung_Unten_Runter:= Referenzfahrt.Stammklemmung_unten_Runter OR Manueller_Betrieb.QStammklemmung_Unten_Runter OR Automatikbetrieb.QStammklemmung_Unten_Runter,
 	Saege_EIN := Manueller_Betrieb.QSaege_Antrieb_Ein OR Automatikbetrieb.QSaege_Antrieb_Ein,
-	Zufuehrer_Vor := Manueller_Betrieb.QZufuehrer_Antrieb_Rueck OR Automatikbetrieb.QZufuehrer_Antrieb_vor,
-	Zufuehrer_Rueck := Referenzfahrt.Zufuehrer_Zurueck OR Manueller_Betrieb.QZufuehrer_Antrieb_Rueck OR Automatikbetrieb.QZufuehrer_Antrieb_Rueck
+	Zufuehrer_Vor := Manueller_Betrieb.QZufuehrer_Antrieb_vor OR Automatikbetrieb.QZufuehrer_Antrieb_vor,
+	Zufuehrer_Rueck := Referenzfahrt.Zufuehrer_Zurueck OR Manueller_Betrieb.QZufuehrer_Antrieb_Rueck OR Automatikbetrieb.QZufuehrer_Antrieb_Rueck,
+	endl_Zufuehrer_vorne := IN_Endl_Zufuehrer_Vorne,
+	endl_Zufuehrer_hinten := IN_Endl_Zufuehrer_Hinten,
+	endl_Zufuehrer_Vorpos := IN_Vorposition_Zufuehrer,
+	endl_Stammklemmung_Oben_Oben := IN_Endl_Obere_Stammklemmung_Oben,
+	endl_Stammklemmung_Oben_Unten := IN_Endl_Obere_Stammklemmung_Unten,
+	endl_Stammklemmung_Unten_Oben := IN_Endl_Untere_Stammklemmung_Oben,
+	endl_Stammklemmung_Unten_Unten := IN_Endl_Untere_Stammklemmung_Unten,
+	endl_Saege_Oben := IN_Endl_Saege_Oben,
+	endl_Saege_Unten:= IN_Endl_Saege_Unten
 );
+
+OUT_Hydraulikpumpe_EIN := Hydraulik_EIN OR Manueller_Betrieb.QHydraulikpumpe_EIN OR Automatikbetrieb.QHydraulikpumpe_EIN;
 
 Steuerung_Meldeleuchten(
 	Maschine_EIN := Maschine_EIN,
@@ -220,6 +236,7 @@ OID200();
     <LineIds Name="Saegeautomat">
       <LineId Id="378" Count="0" />
       <LineId Id="380" Count="0" />
+      <LineId Id="1111" Count="1" />
       <LineId Id="475" Count="0" />
       <LineId Id="695" Count="3" />
       <LineId Id="130" Count="0" />
@@ -245,14 +262,20 @@ OID200();
       <LineId Id="159" Count="1" />
       <LineId Id="165" Count="0" />
       <LineId Id="164" Count="0" />
-      <LineId Id="892" Count="34" />
+      <LineId Id="892" Count="3" />
+      <LineId Id="1020" Count="0" />
+      <LineId Id="896" Count="30" />
       <LineId Id="798" Count="0" />
       <LineId Id="167" Count="0" />
       <LineId Id="580" Count="5" />
       <LineId Id="593" Count="0" />
       <LineId Id="587" Count="0" />
       <LineId Id="928" Count="2" />
+      <LineId Id="1204" Count="7" />
+      <LineId Id="1203" Count="0" />
       <LineId Id="927" Count="0" />
+      <LineId Id="1213" Count="0" />
+      <LineId Id="1212" Count="0" />
       <LineId Id="171" Count="0" />
       <LineId Id="170" Count="0" />
       <LineId Id="180" Count="0" />

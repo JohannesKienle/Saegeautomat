@@ -12,6 +12,16 @@ VAR_INPUT
 	Saege_EIN: BOOL;
 	Zufuehrer_Vor : BOOL;
 	Zufuehrer_Rueck : BOOL;
+	endl_Zufuehrer_vorne : BOOL;
+	endl_Zufuehrer_hinten : BOOL;
+	endl_Zufuehrer_Vorpos : BOOL;
+	endl_Stammklemmung_Oben_Oben : BOOL;
+	endl_Stammklemmung_Oben_Unten : BOOL;
+	endl_Stammklemmung_Unten_Oben : BOOL;
+	endl_Stammklemmung_Unten_Unten : BOOL;
+	endl_Saege_Oben : BOOL;
+	endl_Saege_Unten : BOOL;
+	
 END_VAR
 VAR_OUTPUT
 	OUT_Saege_Senken AT %Q* : BOOL;
@@ -35,9 +45,9 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 Saege(
-	Funktion_A:= Saege_Hoch, 
-	Funktion_B:= Saege_Runter, 
-	Andere_Ventile_in_Ruhestellung:= Stammklemmung_Oben.Ruhestellung OR Stammklemmung_unten.Ruhestellung, 
+	Funktion_A:= Saege_Hoch AND NOT endl_Saege_Oben, 
+	Funktion_B:= Saege_Runter AND NOT endl_Saege_Unten, 
+	Andere_Ventile_in_Ruhestellung:= Stammklemmung_Oben.Ruhestellung AND Stammklemmung_unten.Ruhestellung, 
 	OUT_Spule_A=> OUT_Saege_Heben, 
 	OUT_Spule_B=> OUT_Saege_Senken, 
 	Status_Invalide=> , 
@@ -47,25 +57,25 @@ OUT_Saege_EIN := Saege_EIN;
 OUT_Kettenschmierung_EIN := OUT_Saege_EIN;
 	
 Stammklemmung_Oben(
-	Funktion_A:= Stammklemmung_Oben_Hoch, 
-	Funktion_B:= Stammklemmung_Oben_Runter, 
-	Andere_Ventile_in_Ruhestellung:= Saege.Ruhestellung OR Stammklemmung_unten.Ruhestellung, 
+	Funktion_A:= Stammklemmung_Oben_Hoch AND NOT endl_Stammklemmung_Oben_Oben, 
+	Funktion_B:= Stammklemmung_Oben_Runter AND NOT endl_Stammklemmung_Oben_Unten, 
+	Andere_Ventile_in_Ruhestellung:= Saege.Ruhestellung AND Stammklemmung_unten.Ruhestellung, 
 	OUT_Spule_A=> OUT_Stammklemmung_Oben_Hoch, 
 	OUT_Spule_B=> OUT_Stammklemmung_Oben_Runter, 
 	Status_Invalide=> , 
 	Warte_auf_anderes_Ventil=> );
 	
 Stammklemmung_unten(
-	Funktion_A:= Stammklemmung_Unten_Hoch, 
-	Funktion_B:= Stammklemmung_Unten_Runter, 
-	Andere_Ventile_in_Ruhestellung:= Saege.Ruhestellung OR Stammklemmung_Oben.Ruhestellung, 
+	Funktion_A:= Stammklemmung_Unten_Hoch AND NOT endl_Stammklemmung_Unten_Oben, 
+	Funktion_B:= Stammklemmung_Unten_Runter AND NOT endl_Stammklemmung_Unten_Unten, 
+	Andere_Ventile_in_Ruhestellung:= Saege.Ruhestellung AND Stammklemmung_Oben.Ruhestellung, 
 	OUT_Spule_A=> OUT_Stammklemmung_Unten_Hoch, 
 	OUT_Spule_B=> OUT_Stammklemmung_Unten_Runter, 
 	Status_Invalide=> ,  
 	Warte_auf_anderes_Ventil=> );
 	
-OUT_Zufuehrer_Antrieb_Vor := Zufuehrer_Vor AND NOT Zufuehrer_Rueck;
-OUT_Zufuehrer_Antrieb_Rueck := Zufuehrer_Rueck AND NOT Zufuehrer_Vor;
+OUT_Zufuehrer_Antrieb_Vor := Zufuehrer_Vor AND NOT Zufuehrer_Rueck AND NOT endl_Zufuehrer_vorne;
+OUT_Zufuehrer_Antrieb_Rueck := Zufuehrer_Rueck AND NOT Zufuehrer_Vor AND NOT endl_Zufuehrer_hinten;
 OUT_Zufuehrer_Antrieb_Enable := OUT_Zufuehrer_Antrieb_Vor OR OUT_Zufuehrer_Antrieb_Rueck;]]></ST>
     </Implementation>
     <LineIds Name="Ansteuerung_Ausgaenge">
