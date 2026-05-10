@@ -59,6 +59,12 @@ VAR_IN_OUT
 	
 END_VAR
 VAR
+	Impulsgeber : BLINK;
+	TON_Timer_Impuls : TON;
+	TON_Timer_Pause : TON;
+	Impuls_Zeit : TIME := T#3S;
+	Pause_Zeit : TIME := T#3S;
+	Impuls : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -73,13 +79,7 @@ QZufuehrer_Antrieb_Rueck :=
 QSaege_Antrieb_Ein := 
 QKettenschmierung_EIN := FALSE;
 
-IF Hydraulik_EIN THEN
-	QHydraulikpumpe_EIN := TRUE;
-END_IF
-
-IF Hydraulik_AUS THEN
-	QHydraulikpumpe_EIN := FALSE;
-END_IF
+QHydraulikpumpe_EIN := Hydraulik_EIN;
 
 //Funktionen mit Hydraulik
 IF QHydraulikpumpe_EIN THEN
@@ -103,7 +103,13 @@ QZufuehrer_Antrieb_Rueck := Zufuehrer_Rueck AND NOT Zufuehrer_Vor;
 
 QSaege_Antrieb_Ein := Saege_EIN;
 
-]]></ST>
+Impulsgeber(
+	ENABLE := Kettenschmierung_Manuell_EIN,
+	TIMELOW := Pause_Zeit,
+	TIMEHIGH := Impuls_Zeit,
+	OUT => Impuls);
+
+QKettenschmierung_EIN := Kettenschmierung_Manuell_EIN AND Impuls;]]></ST>
     </Implementation>
     <LineIds Name="Manueller_Betrieb">
       <LineId Id="97" Count="0" />
@@ -111,10 +117,6 @@ QSaege_Antrieb_Ein := Saege_EIN;
       <LineId Id="115" Count="2" />
       <LineId Id="66" Count="0" />
       <LineId Id="173" Count="0" />
-      <LineId Id="172" Count="0" />
-      <LineId Id="175" Count="0" />
-      <LineId Id="180" Count="1" />
-      <LineId Id="177" Count="1" />
       <LineId Id="176" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="65" Count="0" />
@@ -132,7 +134,9 @@ QSaege_Antrieb_Ein := Saege_EIN;
       <LineId Id="94" Count="0" />
       <LineId Id="96" Count="0" />
       <LineId Id="95" Count="0" />
-      <LineId Id="91" Count="0" />
+      <LineId Id="255" Count="4" />
+      <LineId Id="242" Count="0" />
+      <LineId Id="325" Count="0" />
       <LineId Id="90" Count="0" />
     </LineIds>
   </POU>

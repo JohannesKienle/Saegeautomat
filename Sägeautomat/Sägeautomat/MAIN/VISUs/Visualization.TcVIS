@@ -1028,7 +1028,7 @@
                     </o>
                     <o>
                       <v n="Id">743958181L</v>
-                      <v n="Value">"MAIN.Saegeautomat.IOL_Schaltausg_Distanzsensor_Holzende"</v>
+                      <v n="Value">"MAIN.Saegeautomat.IN_Schaltausg_Lichtschranke"</v>
                     </o>
                   </l>
                 </o>
@@ -6735,7 +6735,7 @@
                     </o>
                     <o>
                       <v n="Id">743958181L</v>
-                      <v n="Value">"MAIN.Saegeautomat.IOL_Schaltausg_Distanzsensor_Holzende"</v>
+                      <v n="Value">"MAIN.Saegeautomat.IN_Schaltausg_Lichtschranke"</v>
                     </o>
                   </l>
                 </o>

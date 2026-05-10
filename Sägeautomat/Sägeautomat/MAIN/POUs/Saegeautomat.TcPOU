@@ -13,8 +13,8 @@ VAR
 	IN_BetriebsArt_Warmlauf AT %I* : BOOL;
 	IN_BetriebsArt_Automatik AT %I* : BOOL;
 	IN_BetriebsArt_Manuell AT %I* : BOOL;
-	IN_Kein_Notaus AT %I* : BOOL;
-	IN_Maschine_EIN AT %I* : BOOL;
+	IN_Kein_Notaus AT %I* : BOOL := TRUE;
+	IN_Maschine_EIN AT %I* : BOOL := TRUE;
 	IN_Hydraulik_EIN AT %I* : BOOL;
 	IN_Maschine_AUS AT %I* : BOOL;
 	IN_Hydraulik_AUS AT %I* : BOOL;
@@ -44,6 +44,8 @@ VAR
 	IN_Vorposition_Zufuehrer AT %I* : BOOL;
 	IOL_Schaltausg_Distanzsensor_Holzende : BOOL; //Über Schaltausgang oder IO-Link Analogdaten?
 	IOL_DistanzSensor_Abst : UINT;
+	IN_Schaltausg_Lichtschranke AT %I* : BOOL; 
+	
 	//Stammklemmung Oben
 	IN_Endl_Obere_Stammklemmung_Oben AT %I* : BOOL;
 	IN_Endl_Obere_Stammklemmung_Unten AT %I* : BOOL;
@@ -93,7 +95,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[P_Flanke_Zyklus_Stopp(CLK := IN_Zyklus_Stopp);
+      <ST><![CDATA[P_Flanke_Zyklus_Stopp(CLK := NOT IN_Zyklus_Stopp);
 P_Flanke_Zyklus_Start(CLK := IN_Zyklus_Start);
 P_Flanke_Maschine_EIN(CLK := IN_Maschine_EIN);
 
@@ -112,12 +114,11 @@ IF Maschine_EIN AND IN_BetriebsArt_Referenz THEN
 		SFCInit := P_Flanke_Zyklus_Stopp.Q OR NOT IN_Kein_Notaus,
 		SFCTipMode := IN_Programm_Einzelsatz,
 		SFCTip := P_Flanke_Zyklus_Start.Q,
-		Endl_Saege_Oben := IN_Endl_Saege_Oben,
-		Endl_Obere_Stammklemmung_Oben := IN_Endl_Obere_Stammklemmung_Oben,
-		Endl_Untere_Stammklemmung_Unten := IN_Endl_Untere_Stammklemmung_Unten,
-		Endl_Zufuehrer_Hinten := IN_Endl_Zufuehrer_Hinten,
+		Endl_Saege_Oben := NOT IN_Endl_Saege_Oben,
+		Endl_Obere_Stammklemmung_Oben := NOT IN_Endl_Obere_Stammklemmung_Oben,
+		Endl_Untere_Stammklemmung_Unten := NOT IN_Endl_Untere_Stammklemmung_Unten,
+		Endl_Zufuehrer_Hinten := NOT IN_Endl_Zufuehrer_Hinten,
 		busy := busy,
-		Hydraulik_EIN := Hydraulik_EIN,
 		Referenz_Gefahren := Referenz_gefahren,
 		Zyklus_Beendet := Zyklus_beendet);	
 END_IF
@@ -142,17 +143,17 @@ IF Maschine_EIN AND IN_BetriebsArt_Manuell THEN
 		Saege_AUS:= IN_Saege_AUS, 
 		Saege_Hoch:= IN_Saege_Hoch, 
 		Saege_Runter:= IN_Saege_Runter, 
-		Endl_Zufuehrer_Hinten:= IN_Endl_Zufuehrer_Hinten, 
-		Endl_Zufuehrer_Vorne:= IN_Endl_Zufuehrer_Vorne, 
-		Vorposition_Zufuehrer:= IN_Vorposition_Zufuehrer,  
-		Endl_Obere_Stammklemmung_Oben:= IN_Endl_Obere_Stammklemmung_Oben, 
-		Endl_Obere_Stammklemmung_Unten:= IN_Endl_Obere_Stammklemmung_Unten, 
-		Endl_Tastschiene:= IN_Endl_Tastschiene, 
-		Schaltausg_Druckschalter_Obere_Klemmung:= IN_Schaltausg_Druckschalter_Obere_Klemmung, 
-		Endl_Untere_Stammklemmung_Oben:= IN_Endl_Untere_Stammklemmung_Oben, 
-		Endl_Untere_Stammklemmung_Unten:= IN_Endl_Untere_Stammklemmung_Unten, 
-		Endl_Saege_Oben:= IN_Endl_Saege_Oben, 
-		Endl_Saege_Unten:= IN_Endl_Saege_Unten, 
+		Endl_Zufuehrer_Hinten:= NOT IN_Endl_Zufuehrer_Hinten, 
+		Endl_Zufuehrer_Vorne:= NOT IN_Endl_Zufuehrer_Vorne, 
+		Vorposition_Zufuehrer:= NOT IN_Vorposition_Zufuehrer,  
+		Endl_Obere_Stammklemmung_Oben:= NOT IN_Endl_Obere_Stammklemmung_Oben, 
+		Endl_Obere_Stammklemmung_Unten:= NOT IN_Endl_Obere_Stammklemmung_Unten, 
+		Endl_Tastschiene:= NOT IN_Endl_Tastschiene, 
+		Schaltausg_Druckschalter_Obere_Klemmung:= NOT IN_Schaltausg_Druckschalter_Obere_Klemmung, 
+		Endl_Untere_Stammklemmung_Oben:= NOT IN_Endl_Untere_Stammklemmung_Oben, 
+		Endl_Untere_Stammklemmung_Unten:= NOT IN_Endl_Untere_Stammklemmung_Unten, 
+		Endl_Saege_Oben:= NOT IN_Endl_Saege_Oben, 
+		Endl_Saege_Unten:= NOT IN_Endl_Saege_Unten, 
 		);
 	
 END_IF
@@ -161,24 +162,24 @@ IF Maschine_EIN AND IN_BetriebsArt_Automatik THEN
 	Automatikbetrieb(
 	Kein_Notaus:= IN_Kein_Notaus, 
 	Zyklus_Start:= IN_Zyklus_Start, 
-	Zyklus_Stopp:= IN_Zyklus_Stopp, 
+	Zyklus_Stopp:= NOT IN_Zyklus_Stopp, 
 	Einfache_Klemmung := IN_Einfache_Klemmung,
-	SFCInit:= IN_Zyklus_Stopp, 
+	SFCInit:= not IN_Zyklus_Stopp, 
 	SFCTip:= IN_Programm_Einzelsatz AND IN_Zyklus_Start, 
 	SFCTipMode:= IN_Programm_Einzelsatz, 
-	Endl_Zufuehrer_Hinten:= IN_Endl_Zufuehrer_Hinten, 
-	Endl_Zufuehrer_Vorne:= IN_Endl_Zufuehrer_Vorne, 
-	Vorposition_Zufuehrer:= IN_Vorposition_Zufuehrer, 
-	IOL_Schaltausg_Distanzsensor_Holzende:= IOL_Schaltausg_Distanzsensor_Holzende, 
+	Endl_Zufuehrer_Hinten:= NOT IN_Endl_Zufuehrer_Hinten, 
+	Endl_Zufuehrer_Vorne:= NOT IN_Endl_Zufuehrer_Vorne, 
+	Vorposition_Zufuehrer:= NOT IN_Vorposition_Zufuehrer, 
+	IOL_Schaltausg_Distanzsensor_Holzende:= NOT IN_Schaltausg_Lichtschranke, 
 	IOL_DistanzSensor_Abst:= IOL_DistanzSensor_Abst, 
-	Endl_Obere_Stammklemmung_Oben:= IN_Endl_Obere_Stammklemmung_Oben, 
-	Endl_Obere_Stammklemmung_Unten:= IN_Endl_Obere_Stammklemmung_Unten, 
+	Endl_Obere_Stammklemmung_Oben:= NOT IN_Endl_Obere_Stammklemmung_Oben, 
+	Endl_Obere_Stammklemmung_Unten:= NOT IN_Endl_Obere_Stammklemmung_Unten, 
 	Endl_Tastschiene:= IN_Endl_Tastschiene, 
-	Schaltausg_Druckschalter_Obere_Klemmung:= IN_Schaltausg_Druckschalter_Obere_Klemmung, 
-	Endl_Untere_Stammklemmung_Oben:= IN_Endl_Untere_Stammklemmung_Oben, 
-	Endl_Untere_Stammklemmung_Unten:= IN_Endl_Untere_Stammklemmung_Unten, 
-	Endl_Saege_Oben:= IN_Endl_Saege_Oben, 
-	Endl_Saege_Unten:= IN_Endl_Saege_Unten, 
+	Schaltausg_Druckschalter_Obere_Klemmung:= not IN_Schaltausg_Druckschalter_Obere_Klemmung, 
+	Endl_Untere_Stammklemmung_Oben:= NOT IN_Endl_Untere_Stammklemmung_Oben, 
+	Endl_Untere_Stammklemmung_Unten:= NOT IN_Endl_Untere_Stammklemmung_Unten, 
+	Endl_Saege_Oben:= NOT IN_Endl_Saege_Oben, 
+	Endl_Saege_Unten:= NOT IN_Endl_Saege_Unten, 
 	Warten_Auf_Weiterschalten=> , 
 	Warten_auf_Material=> , 
 	QStammklemmung_Oben_Hoch=> , 
@@ -199,7 +200,7 @@ END_IF
 
 Ansteuerung_Ausgaenge(
 	Saege_Hoch:= Referenzfahrt.Saege_Heben OR Manueller_Betrieb.QSaege_Heben OR Automatikbetrieb.QSaege_Heben, 
-	Saege_Runter:= Manueller_Betrieb.Saege_Runter OR Automatikbetrieb.QSaege_Senken, 
+	Saege_Runter:= Manueller_Betrieb.QSaege_Senken OR Automatikbetrieb.QSaege_Senken, 
 	Stammklemmung_Oben_Hoch:= Referenzfahrt.Stammklemmung_oben_Hoch OR Manueller_Betrieb.QStammklemmung_Oben_Hoch OR Automatikbetrieb.QStammklemmung_Oben_Hoch, 
 	Stammklemmung_Oben_Runter:= Manueller_Betrieb.QStammklemmung_Oben_Runter OR Automatikbetrieb.QStammklemmung_Oben_Runter, 
 	Stammklemmung_Unten_Hoch:= Manueller_Betrieb.QStammklemmung_Unten_Hoch OR Automatikbetrieb.QStammklemmung_Unten_Hoch,
@@ -207,18 +208,19 @@ Ansteuerung_Ausgaenge(
 	Saege_EIN := Manueller_Betrieb.QSaege_Antrieb_Ein OR Automatikbetrieb.QSaege_Antrieb_Ein,
 	Zufuehrer_Vor := Manueller_Betrieb.QZufuehrer_Antrieb_vor OR Automatikbetrieb.QZufuehrer_Antrieb_vor,
 	Zufuehrer_Rueck := Referenzfahrt.Zufuehrer_Zurueck OR Manueller_Betrieb.QZufuehrer_Antrieb_Rueck OR Automatikbetrieb.QZufuehrer_Antrieb_Rueck,
-	endl_Zufuehrer_vorne := IN_Endl_Zufuehrer_Vorne,
-	endl_Zufuehrer_hinten := IN_Endl_Zufuehrer_Hinten,
-	endl_Zufuehrer_Vorpos := IN_Vorposition_Zufuehrer,
-	endl_Stammklemmung_Oben_Oben := IN_Endl_Obere_Stammklemmung_Oben,
-	endl_Stammklemmung_Oben_Unten := IN_Endl_Obere_Stammklemmung_Unten,
-	endl_Stammklemmung_Unten_Oben := IN_Endl_Untere_Stammklemmung_Oben,
-	endl_Stammklemmung_Unten_Unten := IN_Endl_Untere_Stammklemmung_Unten,
-	endl_Saege_Oben := IN_Endl_Saege_Oben,
-	endl_Saege_Unten:= IN_Endl_Saege_Unten
+	endl_Zufuehrer_vorne := NOT IN_Endl_Zufuehrer_Vorne,
+	endl_Zufuehrer_hinten := NOT IN_Endl_Zufuehrer_Hinten,
+	endl_Zufuehrer_Vorpos := NOT IN_Vorposition_Zufuehrer,
+	endl_Stammklemmung_Oben_Oben := NOT IN_Endl_Obere_Stammklemmung_Oben,
+	endl_Stammklemmung_Oben_Unten := NOT IN_Endl_Obere_Stammklemmung_Unten,
+	endl_Stammklemmung_Unten_Oben := NOT IN_Endl_Untere_Stammklemmung_Oben,
+	endl_Stammklemmung_Unten_Unten := NOT IN_Endl_Untere_Stammklemmung_Unten,
+	endl_Saege_Oben := NOT IN_Endl_Saege_Oben,
+	endl_Saege_Unten:= NOT IN_Endl_Saege_Unten,
+	kettenschmierung_EIN := Manueller_Betrieb.QKettenschmierung_EIN OR Automatikbetrieb.QSaege_Antrieb_Ein
 );
 
-OUT_Hydraulikpumpe_EIN := Hydraulik_EIN OR Manueller_Betrieb.QHydraulikpumpe_EIN OR Automatikbetrieb.QHydraulikpumpe_EIN;
+OUT_Hydraulikpumpe_EIN := Manueller_Betrieb.QHydraulikpumpe_EIN OR Automatikbetrieb.QHydraulikpumpe_EIN OR Referenzfahrt.QHydraulik_EIN;
 
 Steuerung_Meldeleuchten(
 	Maschine_EIN := Maschine_EIN,
@@ -230,7 +232,9 @@ Steuerung_Meldeleuchten(
 	Zyklus_beendet := );
 
 
-OID200();
+OID200(
+ OID200SchaltSignal => IOL_Schaltausg_Distanzsensor_Holzende,
+iOID200Dist_zu_Holz => IOL_DistanzSensor_Abst);
 ]]></ST>
     </Implementation>
     <LineIds Name="Saegeautomat">
@@ -249,7 +253,7 @@ OID200();
       <LineId Id="384" Count="1" />
       <LineId Id="371" Count="3" />
       <LineId Id="368" Count="0" />
-      <LineId Id="275" Count="2" />
+      <LineId Id="276" Count="1" />
       <LineId Id="272" Count="0" />
       <LineId Id="153" Count="0" />
       <LineId Id="152" Count="0" />
@@ -273,6 +277,7 @@ OID200();
       <LineId Id="928" Count="2" />
       <LineId Id="1204" Count="7" />
       <LineId Id="1203" Count="0" />
+      <LineId Id="1306" Count="0" />
       <LineId Id="927" Count="0" />
       <LineId Id="1213" Count="0" />
       <LineId Id="1212" Count="0" />
@@ -283,6 +288,7 @@ OID200();
       <LineId Id="183" Count="0" />
       <LineId Id="575" Count="1" />
       <LineId Id="511" Count="0" />
+      <LineId Id="1304" Count="1" />
       <LineId Id="506" Count="0" />
     </LineIds>
   </POU>

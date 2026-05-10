@@ -21,6 +21,7 @@ VAR_INPUT
 	endl_Stammklemmung_Unten_Unten : BOOL;
 	endl_Saege_Oben : BOOL;
 	endl_Saege_Unten : BOOL;
+	kettenschmierung_EIN : BOOL;
 	
 END_VAR
 VAR_OUTPUT
@@ -54,7 +55,7 @@ Saege(
 	Warte_auf_anderes_Ventil=> );
 
 OUT_Saege_EIN := Saege_EIN;
-OUT_Kettenschmierung_EIN := OUT_Saege_EIN;
+OUT_Kettenschmierung_EIN := kettenschmierung_EIN;
 	
 Stammklemmung_Oben(
 	Funktion_A:= Stammklemmung_Oben_Hoch AND NOT endl_Stammklemmung_Oben_Oben, 

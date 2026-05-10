@@ -25,12 +25,13 @@ VAR_OUTPUT
 	Stammklemmung_unten_Runter : BOOL;
 	Zufuehrer_Zurueck : BOOL;
 	Warten_Auf_Weiterschalten : BOOL;
+	QHydraulik_EIN : BOOL;
 
 END_VAR
 VAR_IN_OUT
 	//Merker
 	busy : BOOL;
-	Hydraulik_EIN : BOOL;
+	
 	Referenz_Gefahren : BOOL;
 	Zyklus_Beendet : BOOL;
 	
@@ -1871,7 +1872,7 @@ END_VAR
     </Action>
     <Action Name="Ende_exit" Id="{1672a3e4-67b0-4be6-bc60-cb8cfe2f5b24}">
       <Implementation>
-        <ST><![CDATA[Hydraulik_EIN := FALSE;
+        <ST><![CDATA[QHydraulik_EIN := FALSE;
 
 busy := FALSE;
 Referenz_Gefahren := TRUE;
@@ -1881,7 +1882,7 @@ Zyklus_Beendet := TRUE;
     </Action>
     <Action Name="Hydraulik_An_active" Id="{7246612a-4487-4a08-a6b6-376711e720c2}">
       <Implementation>
-        <ST><![CDATA[Hydraulik_EIN := TRUE;
+        <ST><![CDATA[QHydraulik_EIN := TRUE;
 
 IF Kein_Notaus AND Zyklus_Start AND NOT busy AND Programm_Einzelsatz THEN 
 	Warten_Auf_Weiterschalten := TRUE;
@@ -1898,7 +1899,7 @@ END_IF]]></ST>
     <Action Name="Reset_entry" Id="{6012bee7-c849-43f8-aa0b-86f30e27c83a}">
       <Implementation>
         <ST><![CDATA[busy := FALSE;
-Hydraulik_EIN := FALSE;
+QHydraulik_EIN := FALSE;
 Saege_Heben := FALSE;
 Stammklemmung_oben_Hoch := FALSE;
 Stammklemmung_unten_Runter := FALSE;

@@ -45,9 +45,6 @@
     <Compile Include="POUs\Unterfunktionen\Referenzfahrt.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Unterfunktionen\VISU.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\Unterfunktionen\Warmlauf.TcPOU">
       <SubType>Code</SubType>
     </Compile>

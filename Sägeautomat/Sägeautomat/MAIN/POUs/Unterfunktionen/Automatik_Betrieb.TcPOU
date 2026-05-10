@@ -155,7 +155,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{700a583f-b4d4-43e4-8c14-629c7cd3bec8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">""</v>
+                            <v n="Value">"Init_active"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">19L</v>
@@ -191,7 +191,7 @@ END_VAR
                         <o>
                           <v n="AttributeId">{38391c6d-6d4a-42f8-8ee7-9f45e5adafa8}</v>
                           <o n="Value" t="StringValue">
-                            <v n="Value">"TRUE"</v>
+                            <v n="Value">"Zyklus_Start"</v>
                             <v n="DefaultValue">""</v>
                           </o>
                           <v n="Id">23L</v>
@@ -5178,12 +5178,15 @@ END_VAR
     </Implementation>
     <Action Name="Anl_Bereit_entry" Id="{e773d2be-07aa-4d92-b0f4-5643f324081a}">
       <Implementation>
-        <ST><![CDATA[Warten_auf_Material := True;]]></ST>
+        <ST><![CDATA[Warten_auf_Material := TRUE;
+QHydraulikpumpe_EIN := FALSE;
+]]></ST>
       </Implementation>
     </Action>
     <Action Name="Anl_Bereit_exit" Id="{73cf0ee5-ec99-4c2a-a3b7-2130806987ae}">
       <Implementation>
-        <ST><![CDATA[Warten_auf_Material := False;]]></ST>
+        <ST><![CDATA[Warten_auf_Material := FALSE;
+QHydraulikpumpe_EIN := TRUE;]]></ST>
       </Implementation>
     </Action>
     <Action Name="Antasten_active" Id="{9aeb3b24-da66-4503-b15b-0bf23e9d07a3}">
@@ -5226,13 +5229,36 @@ Holz_Fertig := FALSE;
       <Implementation>
         <ST><![CDATA[IF NOT Vorposition_Zufuehrer AND NOT Endl_Zufuehrer_Vorne THEN
 	QZufuehrer_Antrieb_vor := TRUE;
-END_IF ]]></ST>
+END_IF 
+
+
+IF Vorposition_Zufuehrer OR Endl_Zufuehrer_Vorne OR IOL_Schaltausg_Distanzsensor_Holzende THEN
+	QZufuehrer_Antrieb_vor := FALSE;
+END_IF]]></ST>
       </Implementation>
     </Action>
     <Action Name="Holz_Vor_exit" Id="{e0530356-532e-40fa-90f1-88a067669b06}">
       <Implementation>
         <ST><![CDATA[QZufuehrer_Antrieb_vor := FALSE;
 ]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="Init_active" Id="{9345cd39-b6a8-4d8e-9a83-cf662bdae352}">
+      <Implementation>
+        <ST><![CDATA[QStammklemmung_Oben_Hoch := 
+QStammklemmung_Oben_Runter := 
+QStammklemmung_Unten_Hoch := 
+QStammklemmung_Unten_Runter := 
+QSaege_Senken := 
+QSaege_Heben := 
+//Ausgänge Schalten
+QHydraulikpumpe_EIN := 
+QZufuehrer_Antrieb_vor := 
+QZufuehrer_Antrieb_Rueck := 
+QSaege_Antrieb_Ein := 
+QKettenschmierung_EIN := 
+Warten_Auf_Weiterschalten :=
+Zyklus_Beendet := FALSE;]]></ST>
       </Implementation>
     </Action>
     <Action Name="Initialfahrt_active" Id="{3a592d82-235e-4e01-98bb-2a8a17d3bf23}">
@@ -5306,7 +5332,7 @@ QKettenschmierung_EIN :=
 Warten_Auf_Weiterschalten :=
 Zyklus_Beendet := FALSE;
 
-Hydraulik_EIN := TRUE;]]></ST>
+QHydraulikpumpe_EIN := TRUE;]]></ST>
       </Implementation>
     </Action>
     <Action Name="Saege_An_active" Id="{926a8648-21ef-45aa-8667-2aca32b4168f}">
@@ -5476,10 +5502,10 @@ QSaege_Antrieb_Ein := FALSE;
       </XmlArchive>
     </ObjectProperties>
     <LineIds Name="Automatik_Betrieb.Anl_Bereit_entry">
-      <LineId Id="1" Count="0" />
+      <LineId Id="1" Count="2" />
     </LineIds>
     <LineIds Name="Automatik_Betrieb.Anl_Bereit_exit">
-      <LineId Id="1" Count="0" />
+      <LineId Id="1" Count="1" />
     </LineIds>
     <LineIds Name="Automatik_Betrieb.Antasten_active">
       <LineId Id="1" Count="0" />
@@ -5503,9 +5529,16 @@ QSaege_Antrieb_Ein := FALSE;
       <LineId Id="1" Count="0" />
       <LineId Id="4" Count="0" />
       <LineId Id="3" Count="0" />
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="1" />
     </LineIds>
     <LineIds Name="Automatik_Betrieb.Holz_Vor_exit">
       <LineId Id="1" Count="1" />
+    </LineIds>
+    <LineIds Name="Automatik_Betrieb.Init_active">
+      <LineId Id="2" Count="12" />
+      <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="Automatik_Betrieb.Initialfahrt_active">
       <LineId Id="1" Count="1" />
